@@ -31,3 +31,11 @@ a,
     padding: 0 2rem;
   }
 }
+
+.pageMoveButton {
+  font-size: 3.5vw;
+  border-radius: 1vw;
+}
+.pageMoveButton:hover {
+  text-decoration: underline;
+}
