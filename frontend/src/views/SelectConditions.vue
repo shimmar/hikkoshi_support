@@ -9,13 +9,14 @@
       </select>
     </div>
     <div class="contents">
-      <RouterLink to="/list" class="pageMoveButton">決定</RouterLink>
+      <RouterLink to="/list" class="pageMoveButton" @click="moveToListRoomsPage()">決定</RouterLink>
     </div>
   </main>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useAppStateStore, useSelectedConditionsStore } from '../stores/store.js'
 
 const conditions = [
   { text: '階数', value: 'floor' },
@@ -27,6 +28,13 @@ const conditions = [
   { text: '材質', value: 'made_of' }
 ]
 let selected = ref([])
+
+function moveToListRoomsPage() {
+  const selectedConditions = useSelectedConditionsStore()
+  const appState = useAppStateStore()
+  selectedConditions.selectedConditions = selected
+  appState.progress()
+}
 </script>
 
 <style scoped>

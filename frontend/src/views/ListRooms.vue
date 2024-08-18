@@ -1,23 +1,34 @@
 <template>
   <main>
     <div class="contents">
-      <div v-for="(room, index) in roomList" :key="index">
-        <input
-          type="text"
-          :id="'url' + String(index)"
-          v-model="room.url"
-          @keyup.enter="moveCursor(index)"
-        /><button @click="deleteUrl(index)">削除</button>
-      </div>
+      <table class="urlTable">
+        <tr v-for="(room, index) in roomList" :key="index">
+          <th>
+            <label :for="'url' + String(index)">候補物件{{ index + 1 }}</label>
+          </th>
+          <td>
+            <input
+              type="text"
+              :id="'url' + String(index)"
+              v-model="room.url"
+              @keyup.enter="moveCursor(index)"
+            />
+          </td>
+          <td><button @click="deleteUrl(index)">削除</button></td>
+        </tr>
+      </table>
     </div>
     <div class="contents">
-      <RouterLink to="/" class="pageMoveButton">分析開始</RouterLink>
+      <RouterLink to="/result" class="pageMoveButton" @click="moveToShowResultPage()"
+        >分析開始</RouterLink
+      >
     </div>
   </main>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useAppStateStore, useListedRoomsStore } from '../stores/store.js'
 
 let roomList = ref([{ url: '' }])
 
@@ -36,12 +47,20 @@ function moveCursor(index) {
 function deleteUrl(index) {
   roomList.value.splice(index, 1)
 }
+
+function moveToShowResultPage() {
+  const listedRooms = useListedRoomsStore()
+  const appState = useAppStateStore()
+  listedRooms.listedRooms = roomList
+  appState.progress()
+}
 </script>
 
 <style scoped>
-select {
+.urlTable {
   font-size: 2.5vw;
 }
+
 .contents {
   width: 30vw;
   margin: auto;
